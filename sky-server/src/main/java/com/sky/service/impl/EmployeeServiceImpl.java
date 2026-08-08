@@ -1,6 +1,7 @@
 package com.sky.service.impl;
 
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
@@ -71,6 +72,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
 
         BeanUtils.copyProperties(employeeDTO, employee);
+
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
         // 正常状态
         employee.setStatus(StatusConstant.ENABLE);
