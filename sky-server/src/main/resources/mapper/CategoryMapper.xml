@@ -12,48 +12,47 @@
         select * from category
         <where>
             <if test="name != null and name != ''">
-                and name like concat ('%',#{name},'%')
+                and name like concat('%', #{name}, '%')
             </if>
-            <if test="type != null and type != ''">
-                and type = #{type},
+            <if test="type != null">
+                and type = #{type}
             </if>
         </where>
-        order by sort asc , create_time desc
+        order by sort asc, create_time desc
     </select>
 
     <update id="update">
         update category
         <set>
-            <if test="type != null and type != ''">
+            <if test="type != null">
                 type = #{type},
             </if>
             <if test="name != null and name != ''">
                 name = #{name},
             </if>
-            <if test="sort != null and sort != ''">
+            <if test="sort != null">
                 sort = #{sort},
             </if>
-            <if test="status != null and status != ''">
+            <if test="status != null">
                 status = #{status},
             </if>
-            <if test="updateTime != null and updateTime != ''">
+            <if test="updateTime != null">
                 update_time = #{updateTime},
             </if>
-            <if test="updateUser != null and updateUser != ''">
+            <if test="updateUser != null">
                 update_user = #{updateUser},
             </if>
         </set>
         where id = #{id}
     </update>
 
-    <select id="list" resultType="Category">
+    <select id="list" resultType="com.sky.entity.Category">
         select * from category
         where status = 1
         <if test="type != null">
             and type = #{type}
         </if>
-        order by sort asc,create_time desc
+        order by sort asc, create_time desc
     </select>
-
 
 </mapper>
