@@ -117,4 +117,18 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 根据id查询员工
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询员工")
+    public Result<Employee> selectById(@PathVariable Integer id) {
+        log.info("根据id查询员工:{}", id);
+        Employee employee = employeeService.selectById(id);
+        employee.setPassword("******");
+        return Result.success(employee);
+    }
+
 }

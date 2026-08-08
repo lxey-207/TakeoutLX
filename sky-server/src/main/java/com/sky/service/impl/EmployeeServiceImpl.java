@@ -96,23 +96,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * 员工分页查询
+     *
      * @param employeePageQueryDTO
      * @return
      */
     @Override
     public PageResult<Employee> page(EmployeePageQueryDTO employeePageQueryDTO) {
 
-        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
 
         List<Employee> employeeList = employeeMapper.list(employeePageQueryDTO);
 
         PageInfo<Employee> pageInfo = new PageInfo<>(employeeList);
 
-        return new PageResult<>(pageInfo.getTotal(),pageInfo.getList());
+        return new PageResult<>(pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
      * 员工账号启用与禁用
+     *
      * @param status
      * @param id
      */
@@ -125,5 +127,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .build();
 
         employeeMapper.update(employee);
+    }
+
+    /**
+     * 根据id查询员工
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Employee selectById(Integer id) {
+        return employeeMapper.selectById(id);
     }
 }
