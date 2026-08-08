@@ -36,6 +36,7 @@ public class EmployeeController {
 
     /**
      * 登录
+     *
      * @param employeeLoginDTO
      * @return
      */
@@ -66,6 +67,7 @@ public class EmployeeController {
 
     /**
      * 退出
+     *
      * @return
      */
     @PostMapping("/logout")
@@ -76,6 +78,7 @@ public class EmployeeController {
 
     /**
      * 新增员工
+     *
      * @param employeeDTO
      * @return
      */
@@ -89,15 +92,29 @@ public class EmployeeController {
 
     /**
      * 员工分页查询
+     *
      * @param employeePageQueryDTO
      * @return
      */
     @GetMapping("/page")
     @ApiOperation(value = "员工分页查询")
     public Result<PageResult<Employee>> page(EmployeePageQueryDTO employeePageQueryDTO) {
-        log.info("员工分页查询：{}",employeePageQueryDTO);
+        log.info("员工分页查询：{}", employeePageQueryDTO);
         PageResult<Employee> pageResult = employeeService.page(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * "员工账号启用与禁用"
+     *
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation(value = "员工账号启用与禁用")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        log.info("员工账号启用与禁用:{},{}", status, id);
+        employeeService.startOrStop(status, id);
+        return Result.success();
     }
 
 }

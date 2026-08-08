@@ -71,11 +71,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
-    @Override
-    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        log.info("扩展消息转化器...");
-        MappingJackson2CborHttpMessageConverter converter = new MappingJackson2CborHttpMessageConverter();
-        converter.setObjectMapper(new JacksonObjectMapper());
-        converters.add(0,converter);
-    }
+//    @Override
+//    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        log.info("扩展消息转化器...");
+//        MappingJackson2CborHttpMessageConverter converter = new MappingJackson2CborHttpMessageConverter();
+//        converter.setObjectMapper(new JacksonObjectMapper());
+//        converters.add(0,converter);
+//    }
 }
