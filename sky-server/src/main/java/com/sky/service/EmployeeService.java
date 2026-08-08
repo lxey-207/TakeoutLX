@@ -41,4 +41,10 @@ public interface EmployeeService {
      * @return
      */
     Employee selectById(Integer id);
+
+    /**
+     * 编辑员工信息
+     * @param employeeDTO
+     */
+    void update(EmployeeDTO employeeDTO);
 }

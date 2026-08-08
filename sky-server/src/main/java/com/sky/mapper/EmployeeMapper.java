@@ -40,7 +40,7 @@ public interface EmployeeMapper {
 
 
     /**
-     * 修改员工信息
+     * 编辑员工信息
      * @param employee
      */
     void update(Employee employee);
