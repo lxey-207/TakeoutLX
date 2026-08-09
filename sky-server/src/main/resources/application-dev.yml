@@ -6,3 +6,8 @@ sky:
     database: skyLX
     username: root
     password: qwert123
+
+  alioss:
+    endpoint: https://oss-cn-beijing.aliyuncs.com
+    bucket-name: lxsky
+    region: cn-beijing
