@@ -53,4 +53,14 @@ public class SetmealServiceImpl implements SetmealService {
 
     }
 
+    @Override
+    @Transactional
+    public void deleteByIds(List<Long> ids) {
+
+        if (ids != null && ids.size() > 0) {
+            setmealMapper.deleteByIds(ids);
+            setmealDishMapper.deleteByIds(ids);
+        }
+
+    }
 }
