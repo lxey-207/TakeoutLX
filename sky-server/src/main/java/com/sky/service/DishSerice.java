@@ -32,4 +32,6 @@ public interface DishSerice {
     void deleteByIds(List<Long> ids);
 
     DishVO selectById(Long id);
+
+    void update(DishDTO dishDTO);
 }
