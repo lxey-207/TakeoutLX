@@ -137,4 +137,11 @@ public class DishSericeImpl implements DishSerice {
             dishFlavorMapper.insertBatch(dishFlavors);
         }
     }
+
+    @Override
+    public void startOrStop(Integer status,Long id) {
+        Dish dish = dishMapper.selectById(id);
+        dish.setStatus(status);
+        dishMapper.update(dish);
+    }
 }

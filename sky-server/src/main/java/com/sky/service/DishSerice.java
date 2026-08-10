@@ -34,4 +34,6 @@ public interface DishSerice {
     DishVO selectById(Long id);
 
     void update(DishDTO dishDTO);
+
+    void startOrStop(Integer status, Long id);
 }
