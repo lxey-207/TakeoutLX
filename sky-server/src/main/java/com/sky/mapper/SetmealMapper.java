@@ -29,4 +29,7 @@ public interface SetmealMapper {
 
 
     void deleteByIds(List<Long> ids);
+
+    @Select("select * from setmeal where id = #{id}")
+    Setmeal selectById(Long id);
 }
