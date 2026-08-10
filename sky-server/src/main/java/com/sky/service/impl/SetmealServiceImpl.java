@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,7 +37,9 @@ public class SetmealServiceImpl implements SetmealService {
         BeanUtils.copyProperties(setmealDTO, setmeal);
 
         setmealMapper.insert(setmeal);
+        Long setmealId = setmeal.getId();
         if (setmealDishes != null && setmealDishes.size() > 0) {
+            setmealDishes.forEach(sd -> sd.setSetmealId(setmealId));
             setmealDishMapper.insertBatch(setmealDishes);
         }
     }
@@ -50,7 +53,7 @@ public class SetmealServiceImpl implements SetmealService {
 
         PageInfo<Setmeal> pageInfo = new PageInfo<>(setmealList);
 
-        return new PageResult<>(pageInfo.getTotal(),pageInfo.getList());
+        return new PageResult<>(pageInfo.getTotal(), pageInfo.getList());
 
     }
 
@@ -72,9 +75,31 @@ public class SetmealServiceImpl implements SetmealService {
         Setmeal setmeal = setmealMapper.selectById(id);
         List<SetmealDish> setmealDishes = setmealDishMapper.selectById(id);
 
-        BeanUtils.copyProperties(setmeal,setmealVO);
+        BeanUtils.copyProperties(setmeal, setmealVO);
         setmealVO.setSetmealDishes(setmealDishes);
 
         return setmealVO;
+    }
+
+
+    @Override
+    @Transactional
+    public void update(SetmealDTO setmealDTO) {
+
+        Setmeal setmeal = new Setmeal();
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        List<Long> setmealIds = new ArrayList<>();
+
+        for (SetmealDish setmealDish : setmealDishes) {
+            setmealIds.add(setmeal.getId());
+        }
+
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+
+        setmealMapper.update(setmeal);
+        if (setmealDishes != null && setmealDishes.size() > 0) {
+            setmealDishMapper.deleteByIds(setmealIds);
+            setmealDishMapper.insertBatch(setmealDishes);
+        }
     }
 }
