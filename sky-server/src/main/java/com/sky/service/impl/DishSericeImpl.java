@@ -1,10 +1,14 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.result.PageResult;
 import com.sky.service.DishSerice;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ public class DishSericeImpl implements DishSerice {
 
     /**
      * 新增菜品和对应口味
+     *
      * @param dishDTO
      */
     @Override
@@ -31,7 +36,7 @@ public class DishSericeImpl implements DishSerice {
 
         Dish dish = new Dish();
         List<DishFlavor> dtoFlavors = dishDTO.getFlavors();
-        BeanUtils.copyProperties(dishDTO,dish);
+        BeanUtils.copyProperties(dishDTO, dish);
 
         dishMapper.insert(dish);
         Long dishId = dish.getId();
@@ -42,5 +47,24 @@ public class DishSericeImpl implements DishSerice {
             });
         }
         dishFlavorMapper.insertBatch(dtoFlavors);
+    }
+
+
+    /**
+     * 菜品分页查询
+     *
+     * @param dishPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult page(DishPageQueryDTO dishPageQueryDTO) {
+
+        PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
+
+        List<Dish> dishList = dishMapper.list(dishPageQueryDTO);
+
+        PageInfo<Dish> pageInfo = new PageInfo<>(dishList);
+
+        return new PageResult<>(pageInfo.getTotal(), pageInfo.getList());
     }
 }
