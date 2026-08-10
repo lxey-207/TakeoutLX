@@ -20,4 +20,6 @@ public interface SetmealService {
     SetmealVO selectById(Long id);
 
     void update(SetmealDTO setmealDTO);
+
+    void startOrStop(Integer status, Long id);
 }

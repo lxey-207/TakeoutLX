@@ -52,6 +52,9 @@
             <if test="image != null">
                 image = #{image},
             </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
             <if test="updateTime != null">
                 update_time = #{updateTime},
             </if>
