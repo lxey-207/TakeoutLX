@@ -14,6 +14,7 @@ import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishSerice;
+import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,12 +92,24 @@ public class DishSericeImpl implements DishSerice {
         }
 
         List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
-        if (setmealIds != null && setmealIds.size() > 0){
+        if (setmealIds != null && setmealIds.size() > 0) {
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
 
         dishMapper.deleteByIds(ids);
         dishFlavorMapper.deleteByIds(ids);
 
+    }
+
+    @Override
+    public DishVO selectById(Long id) {
+        DishVO dishVO = new DishVO();
+        Dish dish = dishMapper.selectById(id);
+        List<DishFlavor> dishFlavor = dishFlavorMapper.selectByDishId(id);
+
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setFlavors(dishFlavor);
+
+        return dishVO;
     }
 }
