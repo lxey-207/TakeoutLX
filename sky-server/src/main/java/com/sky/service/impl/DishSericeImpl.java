@@ -144,4 +144,9 @@ public class DishSericeImpl implements DishSerice {
         dish.setStatus(status);
         dishMapper.update(dish);
     }
+
+    @Override
+    public List<Dish> selectByCategoryId(Long categoryId) {
+        return dishMapper.selectByCategoryId(categoryId);
+    }
 }
