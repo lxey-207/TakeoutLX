@@ -14,4 +14,6 @@ public interface DishFlavorMapper {
      * @param dtoFlavors
      */
     void insertBatch(List<DishFlavor> dtoFlavors);
+
+    void deleteByIds(List<Long> ids);
 }

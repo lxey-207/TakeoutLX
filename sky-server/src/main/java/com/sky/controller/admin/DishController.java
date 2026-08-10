@@ -7,9 +7,12 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishSerice;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/dish")
@@ -27,6 +30,7 @@ public class DishController {
      * @return
      */
     @PostMapping
+    @ApiOperation("新增菜品和对应口味")
     public Result save(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品和对应口味：{}", dishDTO);
         dishSerice.saveWithFlavor(dishDTO);
@@ -40,11 +44,25 @@ public class DishController {
      * @return
      */
     @GetMapping("/page")
+    @ApiOperation("菜品分页查询")
     public Result<PageResult<Dish>> page(DishPageQueryDTO dishPageQueryDTO) {
         log.info("菜品分页查询:{}", dishPageQueryDTO);
         PageResult pageResult = dishSerice.page(dishPageQueryDTO);
         return Result.success(pageResult);
     }
 
+    /**
+     * 批量删除菜品
+     *
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    @ApiOperation("批量删除菜品")
+    public Result deleteByIds(@RequestParam List<Long> ids) {
+        log.info("批量删除菜品:{}", ids);
+        dishSerice.deleteByIds(ids);
+        return Result.success();
+    }
 
 }

@@ -36,4 +36,14 @@ public interface DishMapper {
      * @return
      */
     List<Dish> list(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * 批量删除菜品
+     *
+     * @param ids
+     */
+    void deleteByIds(List<Long> ids);
+
+    @Select("select * from dish where id = #{id}")
+    Dish selectById(Long id);
 }
