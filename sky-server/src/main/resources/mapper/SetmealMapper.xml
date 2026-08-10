@@ -10,5 +10,21 @@
                 #{updateUser})
     </insert>
 
+    <select id="list" resultType="com.sky.entity.Setmeal">
+        select * from setmeal s
+        <where>
+            <if test="name != null and name != ''">
+                and s.name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and s.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and s.status = #{status}
+            </if>
+        </where>
+
+    </select>
+
 
 </mapper>
