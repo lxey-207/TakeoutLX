@@ -8,7 +8,7 @@ import com.sky.vo.DishVO;
 
 import java.util.List;
 
-public interface DishSerice {
+public interface DishService {
 
     /**
      * 新增菜品和对应口味
@@ -41,4 +41,5 @@ public interface DishSerice {
 
     List<Dish> selectByCategoryId(Long categoryId);
 
+    List<DishVO> listWithFlavor(Dish dish);
 }

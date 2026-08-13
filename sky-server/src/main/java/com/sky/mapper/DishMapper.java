@@ -52,4 +52,6 @@ public interface DishMapper {
 
 
     List<Dish> selectByCategoryId(Long categoryId);
+
+    List<Dish> list(Dish dish);
 }
