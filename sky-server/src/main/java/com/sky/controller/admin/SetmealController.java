@@ -17,7 +17,7 @@ import java.util.List;
 
 @Api("套餐相关接口")
 @RequestMapping("/admin/setmeal")
-@RestController
+@RestController("adminSetmealController")
 @Slf4j
 public class SetmealController {
 
