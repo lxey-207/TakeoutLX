@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class DishController {
      * @return
      */
     @PostMapping
+    @CacheEvict(cacheNames = "dishCache", key = "#dishDTO.categoryId")
     @ApiOperation("新增菜品和对应口味")
     public Result save(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品和对应口味：{}", dishDTO);
@@ -59,6 +61,7 @@ public class DishController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(cacheNames = "dishCache", allEntries = true)
     @ApiOperation("批量删除菜品")
     public Result deleteByIds(@RequestParam List<Long> ids) {
         log.info("批量删除菜品:{}", ids);
@@ -75,6 +78,7 @@ public class DishController {
     }
 
     @PutMapping
+    @CacheEvict(cacheNames = "dishCache", allEntries = true)
     @ApiOperation("修改菜品")
     public Result update(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品：{}", dishDTO);
@@ -83,6 +87,7 @@ public class DishController {
     }
 
     @PostMapping("/status/{status}")
+    @CacheEvict(cacheNames = "dishCache", allEntries = true)
     @ApiOperation("菜品起售、停售")
     public Result startOrStop(@PathVariable Integer status, Long id) {
         log.info("菜品起售、停售:{}", status);

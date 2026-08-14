@@ -31,12 +31,12 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation("微信登录")
     public Result login(@RequestBody UserLoginDTO userLoginDTO) {
-        log.info("微信登陆:{}",userLoginDTO);
+        log.info("微信登陆:{}", userLoginDTO);
 
         User user = userService.wxLogin(userLoginDTO);
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put(JwtClaimsConstant.USER_ID,user.getId());
+        claims.put(JwtClaimsConstant.USER_ID, user.getId());
         String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
 
         UserLoginVO userLoginVO = UserLoginVO.builder()
@@ -46,6 +46,12 @@ public class UserController {
                 .build();
 
         return Result.success(userLoginVO);
+    }
+
+    @PostMapping("/logout")
+    @ApiOperation("退出")
+    public Result logout(String type) {
+        return Result.success();
     }
 
 }

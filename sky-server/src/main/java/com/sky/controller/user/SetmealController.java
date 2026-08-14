@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,14 +23,16 @@ public class SetmealController {
     private SetmealService setmealService;
 
     @GetMapping("/list")
+    @Cacheable(cacheNames = "setmealCache",key = "#categoryId")
     @ApiOperation("根据分类id查询套餐")
-    public Result list(Long id) {
-        log.info("根据分类id查询套餐:{}", id);
-        List<Setmeal> setmealList = setmealService.selectByCategoryId(id);
+    public Result list(Long categoryId) {
+        log.info("根据分类id查询套餐:{}", categoryId);
+        List<Setmeal> setmealList = setmealService.selectByCategoryId(categoryId);
         return Result.success(setmealList);
     }
 
     @GetMapping("/dish/{id}")
+    @Cacheable(cacheNames = "setmealCache",key = "#id")
     @ApiOperation("根据套餐id查询包含的菜品")
     public Result<List<DishItemVO>> dishList(@PathVariable("id") Long id) {
         List<DishItemVO> list = setmealService.getDishItemById(id);
