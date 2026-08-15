@@ -66,4 +66,8 @@ public class ShoppingCartServiceIml implements ShoppingCartService {
         return shoppingCartMapper.list(shoppingCart);
     }
 
+    @Override
+    public void clean() {
+        shoppingCartMapper.deleteAll(BaseContext.getCurrentId());
+    }
 }
