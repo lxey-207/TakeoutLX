@@ -33,13 +33,21 @@ public class ShoppingCartContriller {
     @ApiOperation("查看购物车")
     public Result<List<ShoppingCart>> showShoppingCart() {
         List<ShoppingCart> shoppingCarts = shoppingCartService.list();
-        return Result.success();
+        return Result.success(shoppingCarts);
     }
 
     @DeleteMapping("/clean")
     @ApiOperation("清空购物车")
     public Result clean() {
         shoppingCartService.clean();
+        return Result.success();
+    }
+
+    @PostMapping("/sub")
+    @ApiOperation("删除购物车中一个商品")
+    public Result delete(@RequestBody ShoppingCartDTO shoppingCartDTO) {
+        log.info("删除购物车中一个商品:{}", shoppingCartDTO);
+        shoppingCartService.delete(shoppingCartDTO);
         return Result.success();
     }
 

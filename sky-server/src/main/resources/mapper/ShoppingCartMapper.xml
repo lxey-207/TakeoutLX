@@ -17,7 +17,7 @@
             <if test="dishId != null">
                 and dish_id = #{dishId}
             </if>
-            <if test="setSetmealId != null">
+            <if test="setmealId != null">
                 and setmeal_id = #{setmealId}
             </if>
             <if test="dishFlavor != null">
@@ -30,6 +30,12 @@
         delete
         from shopping_cart
         where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteById">
+        delete
+        from shopping_cart
+        where id = #{id}
     </delete>
 
 

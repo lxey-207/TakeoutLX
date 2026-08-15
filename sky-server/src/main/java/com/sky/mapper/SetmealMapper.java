@@ -2,6 +2,7 @@ package com.sky.mapper;
 
 import com.sky.annotation.AutoFill;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.DishItemVO;
@@ -36,11 +37,20 @@ public interface SetmealMapper {
 
     void update(Setmeal setmeal);
 
-    @Select("select * from setmeal where category_id = #{id}")
+    @Select("select * from setmeal where category_id = #{id} and status = 1")
     List<Setmeal> selectByCategoryId(Long id);
 
     @Select("select sd.name, sd.copies, d.image, d.description " +
             "from setmeal_dish sd left join dish d on sd.dish_id = d.id " +
             "where sd.setmeal_id = #{setmealId}")
     List<DishItemVO> getDishItemBySetmealId(Long setmealId);
+
+    /**
+     * 根据套餐id查询套餐内包含的所有菜品
+     * @param setmealId
+     * @return
+     */
+    @Select("select d.* from dish d left join setmeal_dish sd on d.id = sd.dish_id " +
+            "where sd.setmeal_id = #{setmealId}")
+    List<Dish> getDishBySetmealId(Long setmealId);
 }

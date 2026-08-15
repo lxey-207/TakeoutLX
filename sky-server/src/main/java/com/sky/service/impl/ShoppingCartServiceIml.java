@@ -42,12 +42,12 @@ public class ShoppingCartServiceIml implements ShoppingCartService {
         }
 
         Long dishId = shoppingCartDTO.getDishId();
-        if (dishId != null){
+        if (dishId != null) {
             Dish dish = dishMapper.selectById(dishId);
             shoppingCart.setName(dish.getName());
             shoppingCart.setImage(dish.getImage());
             shoppingCart.setAmount(dish.getPrice());
-        }else {
+        } else {
             Setmeal setmeal = setmealMapper.selectById(shoppingCartDTO.getSetmealId());
             shoppingCart.setName(setmeal.getName());
             shoppingCart.setImage(setmeal.getImage());
@@ -69,5 +69,27 @@ public class ShoppingCartServiceIml implements ShoppingCartService {
     @Override
     public void clean() {
         shoppingCartMapper.deleteAll(BaseContext.getCurrentId());
+    }
+
+    @Override
+    public void delete(ShoppingCartDTO shoppingCartDTO) {
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        shoppingCart.setUserId(BaseContext.getCurrentId());
+
+        List<ShoppingCart> shoppingCarts = shoppingCartMapper.list(shoppingCart);
+
+        if (shoppingCarts != null && shoppingCarts.size() > 0) {
+            ShoppingCart cart = shoppingCarts.get(0);
+            Integer num = cart.getNumber();
+            if (num == 1) {
+                shoppingCartMapper.deleteById(cart.getId());
+            } else {
+                cart.setNumber(cart.getNumber() - 1);
+                shoppingCartMapper.updateNum(cart);
+            }
+        }
+
     }
 }
