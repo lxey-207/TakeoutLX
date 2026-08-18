@@ -8,6 +8,7 @@ import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 
 public interface OrderService {
 
@@ -18,4 +19,6 @@ public interface OrderService {
     void paySuccess(String outTradeNo);
 
     PageResult<OrdersDTO> page(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    OrderVO selectById(Long id);
 }
