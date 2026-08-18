@@ -1,8 +1,12 @@
 package com.sky.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersDTO;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
@@ -10,6 +14,7 @@ import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
@@ -148,5 +153,28 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
     }
 
+    @Override
+    public PageResult<OrdersDTO> page(OrdersPageQueryDTO ordersPageQueryDTO) {
 
+        // 只查询当前登录用户的订单
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+
+        List<Orders> orders = orderMapper.list(ordersPageQueryDTO);
+        List<OrdersDTO> ordersDTOS = new ArrayList<>();
+        for (Orders order : orders) {
+            OrdersDTO ordersDTO = new OrdersDTO();
+            BeanUtils.copyProperties(order, ordersDTO);
+            // 查询当前订单的所有菜品明细
+            List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(order.getId());
+            ordersDTO.setOrderDetailList(orderDetailList);
+            ordersDTOS.add(ordersDTO);
+        }
+
+        // 注意：PageInfo 要传 PageHelper 分页出的 Page 对象，才能拿到真实 total
+        PageInfo<Orders> pageInfo = new PageInfo<>(orders);
+
+        return new PageResult<>(pageInfo.getTotal(), ordersDTOS);
+    }
 }
