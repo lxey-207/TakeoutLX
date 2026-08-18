@@ -23,4 +23,6 @@ public interface OrderService {
     OrderVO selectById(Long id);
 
     void cancel(Long id);
+
+    void repetition(Long id);
 }

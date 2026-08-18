@@ -8,6 +8,14 @@
         VALUES (#{name}, #{image}, #{userId}, #{dishId}, #{setmealId}, #{dishFlavor}, #{amount}, #{createTime})
     </insert>
 
+    <insert id="insertBatch">
+        insert into shopping_cart (name, image, user_id, dish_id, setmeal_id, dish_flavor, amount, create_time)
+        VALUES
+        <foreach collection="list" item="sc" separator=",">
+            (#{sc.name}, #{sc.image}, #{sc.userId}, #{sc.dishId}, #{sc.setmealId}, #{sc.dishFlavor}, #{sc.amount}, #{sc.createTime})
+        </foreach>
+    </insert>
+
     <select id="list" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart
         <where>
