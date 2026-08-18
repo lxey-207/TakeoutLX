@@ -10,6 +10,7 @@ import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
+import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
 import com.sky.result.PageResult;
@@ -183,11 +184,41 @@ public class OrderServiceImpl implements OrderService {
 
         Orders orders = orderMapper.getById(id);
         List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
-        BeanUtils.copyProperties(orders,orderVO);
+        BeanUtils.copyProperties(orders, orderVO);
         orderVO.setOrderDetailList(orderDetailList);
 
         return orderVO;
     }
 
+    @Override
+    public void cancel(Long id) {
 
+        // 1. 查订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        // 2. 校验订单存在
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        // 3. 校验状态：只有"待付款"(1)和"待接单"(2)能取消
+        if (ordersDB.getStatus() > 2) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        // 4. 校验归属：必须是当前登录用户的订单
+        if (!ordersDB.getUserId().equals(BaseContext.getCurrentId())) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        // 5. 只更新需要的字段（配合 XML 的 <if> 动态 SQL）
+        Orders orders = Orders.builder()
+                .id(ordersDB.getId())
+                .status(Orders.CANCELLED)          // 已取消
+                .cancelReason("用户取消")          // 记录原因
+                .cancelTime(LocalDateTime.now())   // 记录时间
+                .build();
+
+        orderMapper.update(orders);
+    }
 }
