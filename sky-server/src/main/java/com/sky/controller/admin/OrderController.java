@@ -69,8 +69,18 @@ public class OrderController {
     @ApiOperation("取消订单")
     public Result cancel(@RequestBody OrdersCancelDTO ordersCancelDTO) {
         log.info("取消订单:{}", ordersCancelDTO);
-        orderService.aCancel(ordersCancelDTO.getId(),ordersCancelDTO.getCancelReason());
+        orderService.aCancel(ordersCancelDTO.getId(), ordersCancelDTO.getCancelReason());
         return Result.success();
     }
+
+    @PutMapping("/delivery/{id}")
+    @ApiOperation("派送订单")
+    public Result delivery(@PathVariable Long id) {
+        log.info("派送订单:{}", id);
+        orderService.delivery(id);
+        return Result.success();
+    }
+
+
 
 }

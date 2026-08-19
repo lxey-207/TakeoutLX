@@ -38,4 +38,7 @@ public interface OrderService {
     void rejection(Long id, String rejectionReason);
 
     void aCancel(Long id, String cancelReason);
+
+    void delivery(Long id);
+
 }
