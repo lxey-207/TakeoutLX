@@ -281,4 +281,24 @@ public class OrderServiceImpl implements OrderService {
 
         return orderStatisticsVO;
     }
+
+    @Override
+    public void confirm(Long id) {
+
+        Orders ordersDB = orderMapper.getById(id);
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        // 只有"待接单"(2) 才能接单
+        if (!Orders.TO_BE_CONFIRMED.equals(ordersDB.getStatus())) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Orders orders = Orders.builder()
+                .id(ordersDB.getId())
+                .status(Orders.CONFIRMED)   // 待派送(3)
+                .build();
+        orderMapper.update(orders);
+    }
+
 }

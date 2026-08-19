@@ -33,5 +33,6 @@ public interface OrderService {
 
     OrderStatisticsVO statistics();
 
+    void confirm(Long id);
 
 }
