@@ -24,7 +24,7 @@ public interface OrderService {
 
     OrderVO selectById(Long id);
 
-    void cancel(Long id);
+    void uCancel(Long id);
 
     void repetition(Long id);
 
@@ -37,5 +37,5 @@ public interface OrderService {
 
     void rejection(Long id, String rejectionReason);
 
-
+    void aCancel(Long id, String cancelReason);
 }

@@ -193,7 +193,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void cancel(Long id) {
+    public void uCancel(Long id) {
 
         // 1. 查订单
         Orders ordersDB = orderMapper.getById(id);
@@ -323,5 +323,32 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         orderMapper.update(orders);
 
+    }
+
+    @Override
+    public void aCancel(Long id, String cancelReason) {
+        // 1. 查订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        // 2. 校验订单存在
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        // 3. 校验状态：已完成(5)和已取消(6)的订单不能再取消
+        if (ordersDB.getStatus().equals(Orders.COMPLETED)
+                || ordersDB.getStatus().equals(Orders.CANCELLED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+
+        Orders orders = Orders.builder()
+                .id(ordersDB.getId())
+                .status(Orders.CANCELLED)          // 已取消
+                .cancelReason(cancelReason)          // 记录原因
+                .cancelTime(LocalDateTime.now())   // 记录时间
+                .build();
+
+        orderMapper.update(orders);
     }
 }
