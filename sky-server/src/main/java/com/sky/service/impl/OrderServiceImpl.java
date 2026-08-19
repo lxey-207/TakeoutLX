@@ -301,4 +301,27 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
     }
 
+    @Override
+    public void rejection(Long id, String rejectionReason) {
+
+        Orders ordersDB = orderMapper.getById(id);
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        // 只有"待接单"(2) 才能拒单
+        if (!Orders.TO_BE_CONFIRMED.equals(ordersDB.getStatus())) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        // 配置真实微信支付后：已支付订单被拒单时，需要调用 weChatPayUtil.refund() 发起退款
+        // 实体没有 rejectTime 字段，暂用 cancelTime 记录拒单时间
+        Orders orders = Orders.builder()
+                .id(ordersDB.getId())
+                .status(Orders.CANCELLED)
+                .rejectionReason(rejectionReason)
+                .cancelTime(LocalDateTime.now())
+                .build();
+        orderMapper.update(orders);
+
+    }
 }

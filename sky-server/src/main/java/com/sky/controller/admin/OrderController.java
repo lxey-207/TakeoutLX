@@ -54,4 +54,12 @@ public class OrderController {
         return Result.success();
     }
 
+    @PutMapping("/rejection")
+    @ApiOperation("拒单")
+    public Result rejection(Long id, String rejectionReason) {
+        log.info("拒单:{},{}", id, rejectionReason);
+        orderService.rejection(id, rejectionReason);
+        return Result.success();
+    }
+
 }

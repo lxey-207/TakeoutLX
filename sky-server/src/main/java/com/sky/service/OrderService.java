@@ -35,4 +35,7 @@ public interface OrderService {
 
     void confirm(Long id);
 
+    void rejection(Long id, String rejectionReason);
+
+
 }
