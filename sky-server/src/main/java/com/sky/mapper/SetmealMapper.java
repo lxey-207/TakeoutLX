@@ -10,12 +10,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SetmealMapper {
 
     /**
      * 根据分类id查询套餐的数量
+     *
      * @param id
      * @return
      */
@@ -47,10 +49,19 @@ public interface SetmealMapper {
 
     /**
      * 根据套餐id查询套餐内包含的所有菜品
+     *
      * @param setmealId
      * @return
      */
     @Select("select d.* from dish d left join setmeal_dish sd on d.id = sd.dish_id " +
             "where sd.setmeal_id = #{setmealId}")
     List<Dish> getDishBySetmealId(Long setmealId);
+
+    /**
+     * 根据条件统计套餐数量
+     *
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }
