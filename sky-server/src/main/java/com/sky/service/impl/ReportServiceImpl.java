@@ -18,6 +18,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -182,6 +183,12 @@ public class ReportServiceImpl implements ReportService {
 
         InputStream in = getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");
         try {
+            //设置响应头，让浏览器以附件形式下载，且文件名不乱码
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+            String fileName = URLEncoder.encode("运营数据报表.xlsx", "UTF-8");
+            response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+
             //基于模板文件创建一个新的Excel文件
             XSSFWorkbook excel = new XSSFWorkbook(in);
 

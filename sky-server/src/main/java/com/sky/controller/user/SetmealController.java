@@ -32,7 +32,6 @@ public class SetmealController {
     }
 
     @GetMapping("/dish/{id}")
-    @Cacheable(cacheNames = "setmealCache",key = "#id")
     @ApiOperation("根据套餐id查询包含的菜品")
     public Result<List<DishItemVO>> dishList(@PathVariable("id") Long id) {
         List<DishItemVO> list = setmealService.getDishItemById(id);
